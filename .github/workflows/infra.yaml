@@ -1,12 +1,19 @@
 name: 'Infrastructure CI/CD'
 
+
 on:
   push:
     branches:
       - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/infra.yaml'
   pull_request:
     branches:
       - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/infra.yaml'
 
 jobs:
   terraform-validate:
