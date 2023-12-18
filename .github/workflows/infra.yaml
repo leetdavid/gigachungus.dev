@@ -41,7 +41,7 @@ jobs:
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false -auto-approve -var
+        run: terraform apply -input=false -auto-approve
         env:
           TF_VAR_CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
