@@ -12,25 +12,25 @@ terraform {
 }
 
 provider "cloudflare" {
-  api_token = var.cloudflare_api_token
+  api_token = var.CLOUDFLARE_API_TOKEN
 }
 
-variable "cloudflare_api_token" {
+variable "CLOUDFLARE_API_TOKEN" {
   type        = string
   description = "Cloudflare API Token"
   sensitive   = true
 }
 
-variable "cloudflare_zone_id" {
+variable "CLOUDFLARE_ZONE_ID" {
   type        = string
   description = "Cloudflare Zone ID"
 }
 
 provider "vercel" {
-  api_token = var.vercel_api_token
+  api_token = var.VERCEL_API_TOKEN
 }
 
-variable "vercel_api_token" {
+variable "VERCEL_API_TOKEN" {
   type        = string
   description = "Vercel Token"
   sensitive   = true

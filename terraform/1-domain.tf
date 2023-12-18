@@ -11,7 +11,7 @@ resource "cloudflare_record" "gigachungus_dev" {
     "@", "www"
   ])
 
-  zone_id = var.cloudflare_zone_id
+  zone_id = var.CLOUDFLARE_ZONE_ID
   type    = "CNAME"
   name    = each.key
   value   = "cname.vercel-dns.com." # vercel
