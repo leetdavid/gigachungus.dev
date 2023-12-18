@@ -9,6 +9,10 @@ terraform {
       version = "~> 0.3"
     }
   }
+  backend "gcs" {
+    bucket = "gigachungus-dev-tfstate-2a48be75c0fabab1"
+    prefix = "terraform.tfstate"
+  }
 }
 
 provider "cloudflare" {
