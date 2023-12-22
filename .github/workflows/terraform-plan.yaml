@@ -12,7 +12,7 @@ env:
   TF_CLOUD_ORGANIZATION: "leetdavid"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "gigachungus-dev"
-  CONFIG_DIRECTORY: "./terraform"
+  CONFIG_DIRECTORY: "./terraform/"
 
 jobs:
   terraform-plan:
