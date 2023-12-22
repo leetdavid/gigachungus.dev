@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'terraform/**'
-      - '.github/workflows/infra.yaml'
+      - '.github/workflows/terraform-apply.yaml'
 
 env:
   TF_CLOUD_ORGANIZATION: "leetdavid"
