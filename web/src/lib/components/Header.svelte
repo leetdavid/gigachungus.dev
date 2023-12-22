@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <header
   class="supports-[backdrop-filter]:bg-background/60 bg-background/95 sticky top-0 z-50 w-full border-b shadow-sm backdrop-blur"
 >
