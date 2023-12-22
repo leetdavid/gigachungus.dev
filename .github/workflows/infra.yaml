@@ -8,6 +8,12 @@ on:
       - 'terraform/**'
       - '.github/workflows/infra.yaml'
 
+env:
+  TF_CLOUD_ORGANIZATION: "leetdavid"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "gigachungus-dev"
+  CONFIG_DIRECTORY: "./terraform"
+
 jobs:
   terraform:
     name: Terraform - Validate and Apply
@@ -25,32 +31,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Google Auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-
       - name: Terraform Setup
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
+      - name: Uplaod Configuration
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        id: apply-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+      
+      - name: Create Apply Run
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        id: apply-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
 
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-
-      - name: Terraform Apply
+      - name: Apply
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
+        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         id: apply
-        run: terraform apply -input=false -auto-approve
-        env:
-          TF_VAR_CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          TF_VAR_CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          TF_VAR_VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+        with:
+          run: ${{ steps.apply-run.outputs.run_id }}
+          comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
