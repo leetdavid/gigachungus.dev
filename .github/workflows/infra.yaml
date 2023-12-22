@@ -13,9 +13,10 @@ jobs:
     name: Terraform - Validate and Apply
     runs-on: ubuntu-latest
     environment: production
-    # permissions:
-    #   contents: read
-    #   pull-requests: read
+    permissions:
+      contents: read
+      pull-requests: read
+      id-token: 'write'
     defaults:
       run:
         working-directory: ./terraform
