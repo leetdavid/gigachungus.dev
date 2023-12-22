@@ -16,9 +16,8 @@ env:
 
 jobs:
   terraform:
-    name: Terraform - Validate and Apply
+    name: Terraform Apply
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: Checkout
