@@ -12,6 +12,7 @@ jobs:
   terraform:
     name: Terraform - Validate and Apply
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: read
       pull-requests: read
