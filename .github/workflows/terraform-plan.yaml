@@ -7,7 +7,6 @@ on:
     paths:
       - 'terraform/**'
       - '.github/workflows/infra-pr.yaml'
-      name: "Terraform Plan"
 
 env:
   TF_CLOUD_ORGANIZATION: "leetdavid"
@@ -22,7 +21,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
