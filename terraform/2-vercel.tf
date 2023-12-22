@@ -11,7 +11,7 @@ resource "vercel_project" "gigachungus_dev" {
 }
 
 resource "vercel_project_domain" "gigachungus_dev" {
-  for_each   = toset(["gigachungus.dev", "www.gigachungus.dev"])
+  for_each   = toset(["gigachungus.dev", "www.gigachungus.dev", "cs2.gigachungus.dev"])
   project_id = vercel_project.gigachungus_dev.id
   domain     = each.key
 }
