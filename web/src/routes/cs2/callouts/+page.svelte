@@ -1,12 +1,50 @@
 <script lang="ts">
   import * as Tabs from '$lib/components/ui/tabs';
   import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
+  import { browser } from '$app/environment';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+
+  let mapValue: string;
+
+  const mapList = [
+    'ancient',
+    'anubis',
+    'inferno',
+    'mirage',
+    'nuke',
+    'overpass',
+    'vertigo',
+  ];
+
+  onMount(() => {
+    if (!browser) return;
+    if (
+      window.location.hash &&
+      mapList.includes(window.location.hash.slice(1))
+    ) {
+      mapValue = window.location.hash.slice(1);
+    } else {
+      goto('#mirage');
+    }
+  });
+
+  $: if (browser && mapValue && window.location.hash !== mapValue) {
+    if (mapList.includes(mapValue)) {
+      goto(`#${mapValue}`);
+    } else {
+      goto('#mirage');
+    }
+  }
+
+  page.subscribe((value) => {
+    const hash = value.url.hash.slice(1);
+    if (hash) mapValue = hash;
+  });
 </script>
 
-<Tabs.Root value="mirage">
+<Tabs.Root bind:value={mapValue}>
   <Tabs.List class="grid w-full grid-cols-7">
     <Tabs.Trigger value="ancient">Ancient</Tabs.Trigger>
     <Tabs.Trigger value="anubis">Anubis</Tabs.Trigger>
