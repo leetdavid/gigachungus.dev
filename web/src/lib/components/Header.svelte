@@ -10,6 +10,10 @@
       href: '/cs2',
     },
     {
+      name: 'Tools',
+      href: '/tools',
+    },
+    {
       name: 'GitHub',
       href: 'https://github.com/leetdavid/gigachungus.dev',
       external: true,
