@@ -37,7 +37,7 @@
 
     <Command.Empty>No results found.</Command.Empty>
 
-    <Command.Group heading="Counter-Strike 2 Callouts">
+    <Command.Group heading="Counter-Strike 2 Map Callouts">
       {#each ['Ancient', 'Anubis', 'Inferno', 'Mirage', 'Nuke', 'Overpass', 'Vertigo'] as map}
         <Command.Item
           onSelect={() => routeTo(`/cs2/callouts#${map.toLowerCase()}`)}
