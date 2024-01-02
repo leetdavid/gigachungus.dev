@@ -3,15 +3,15 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { Map } from 'lucide-svelte';
+  import { commandMenuState } from '$stores/commandmenu';
 
-  let open = false;
   let loading = false;
 
   onMount(() => {
     function handleKeydown(e: KeyboardEvent) {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        open = !open;
+        commandMenuState.update((value) => !value);
       }
     }
 
@@ -24,11 +24,11 @@
 
   function routeTo(href: string) {
     goto(href);
-    open = false;
+    commandMenuState.set(false);
   }
 </script>
 
-<Command.Dialog bind:open>
+<Command.Dialog bind:open={$commandMenuState}>
   <Command.Input placeholder="Type a command or search..." />
   <Command.List>
     {#if loading}
