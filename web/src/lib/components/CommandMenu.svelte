@@ -2,7 +2,7 @@
   import * as Command from '$components/ui/command';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { Map } from 'lucide-svelte';
+  import { Map, ListOrdered } from 'lucide-svelte';
   import { commandMenuState } from '$stores/commandmenu';
 
   let loading = false;
@@ -37,6 +37,7 @@
 
     <Command.Empty>No results found.</Command.Empty>
 
+    <!-- CS2 Map Callouts -->
     <Command.Group heading="Counter-Strike 2 Map Callouts">
       {#each ['Ancient', 'Anubis', 'Inferno', 'Mirage', 'Nuke', 'Overpass', 'Vertigo'] as map}
         <Command.Item
@@ -46,10 +47,14 @@
           <span>Map Callouts: {map}</span>
         </Command.Item>
       {/each}
-      <!-- <Command.Item onSelect={() => routeTo('/cs2/callouts#ancient')}>
-        <Menu class="mr-2 h-4 w-4" />
-        <span>Callouts: Ancient</span>
-      </Command.Item> -->
+    </Command.Group>
+
+    <!-- Tools -->
+    <Command.Group heading="Tools">
+      <Command.Item onSelect={() => routeTo('/tools/pairwise-ranker')}>
+        <ListOrdered class="mr-2 h-4 w-4" />
+        <span>Pairwise Ranker</span>
+      </Command.Item>
     </Command.Group>
   </Command.List>
 </Command.Dialog>
