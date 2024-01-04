@@ -5,58 +5,67 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
 
-  let mapValue: string;
+  // let mapValue: string;
 
-  const mapList = [
-    'ancient',
-    'anubis',
-    'inferno',
-    'mirage',
-    'nuke',
-    'overpass',
-    'vertigo',
+  let mapValueStore = writable<string>('');
+
+  const validMapNames: string[] = [
+    '#ancient',
+    '#anubis',
+    '#inferno',
+    '#mirage',
+    '#nuke',
+    '#overpass',
+    '#vertigo',
   ];
 
   onMount(() => {
-    if (!browser) return;
-    if (
-      window.location.hash &&
-      mapList.includes(window.location.hash.slice(1))
-    ) {
-      mapValue = window.location.hash.slice(1);
-    } else {
+    if (!browser) {
+      console.log("What are you doing here? You're not supposed to be here!");
+      return;
+    }
+
+    if (!window.location.hash) {
+      // Default when no hash is present, go to Mirage
       goto('#mirage');
+    }
+
+    if (window.location.hash && validMapNames.includes(window.location.hash)) {
+      mapValueStore.set(window.location.hash);
     }
   });
 
-  $: if (browser && mapValue && window.location.hash !== mapValue) {
-    if (mapList.includes(mapValue)) {
-      goto(`#${mapValue}`);
-    } else {
-      goto('#mirage');
+  mapValueStore.subscribe((value) => {
+    if (browser) {
+      if (validMapNames.includes(value)) {
+        goto(value);
+      } else {
+        goto('#mirage');
+      }
     }
-  }
+  });
 
   page.subscribe((value) => {
-    const hash = value.url.hash.slice(1);
-    if (hash) mapValue = hash;
+    const hash = value.url.hash;
+    if (hash) mapValueStore.set(hash);
   });
 </script>
 
-<Tabs.Root bind:value={mapValue}>
+<Tabs.Root bind:value={$mapValueStore}>
   <Tabs.List class="grid w-full grid-cols-7">
-    <Tabs.Trigger value="ancient">Ancient</Tabs.Trigger>
-    <Tabs.Trigger value="anubis">Anubis</Tabs.Trigger>
-    <Tabs.Trigger value="inferno">Inferno</Tabs.Trigger>
-    <Tabs.Trigger value="mirage">Mirage</Tabs.Trigger>
-    <Tabs.Trigger value="nuke">Nuke</Tabs.Trigger>
-    <Tabs.Trigger value="overpass">Overpass</Tabs.Trigger>
-    <Tabs.Trigger value="vertigo">Vertigo</Tabs.Trigger>
+    <Tabs.Trigger value="#ancient">Ancient</Tabs.Trigger>
+    <Tabs.Trigger value="#anubis">Anubis</Tabs.Trigger>
+    <Tabs.Trigger value="#inferno">Inferno</Tabs.Trigger>
+    <Tabs.Trigger value="#mirage">Mirage</Tabs.Trigger>
+    <Tabs.Trigger value="#nuke">Nuke</Tabs.Trigger>
+    <Tabs.Trigger value="#overpass">Overpass</Tabs.Trigger>
+    <Tabs.Trigger value="#vertigo">Vertigo</Tabs.Trigger>
   </Tabs.List>
 
   <!-- Ancient -->
-  <Tabs.Content value="ancient">
+  <Tabs.Content value="#ancient">
     <Card.Root>
       <Card.Header>
         <Card.Title>Ancient</Card.Title>
@@ -71,7 +80,7 @@
   </Tabs.Content>
 
   <!-- Anubis -->
-  <Tabs.Content value="anubis">
+  <Tabs.Content value="#anubis">
     <Card.Root>
       <Card.Header>
         <Card.Title>Anubis</Card.Title>
@@ -86,7 +95,7 @@
   </Tabs.Content>
 
   <!-- Inferno -->
-  <Tabs.Content value="inferno">
+  <Tabs.Content value="#inferno">
     <Card.Root>
       <Card.Header>
         <Card.Title>Inferno</Card.Title>
@@ -102,7 +111,7 @@
   </Tabs.Content>
 
   <!-- Mirage -->
-  <Tabs.Content value="mirage">
+  <Tabs.Content value="#mirage">
     <Card.Root>
       <Card.Header>
         <Card.Title>Mirage</Card.Title>
@@ -117,7 +126,7 @@
   </Tabs.Content>
 
   <!-- Nuke -->
-  <Tabs.Content value="nuke">
+  <Tabs.Content value="#nuke">
     <Card.Root>
       <Card.Header>
         <Card.Title>Nuke</Card.Title>
@@ -132,7 +141,7 @@
   </Tabs.Content>
 
   <!-- Overpass -->
-  <Tabs.Content value="overpass">
+  <Tabs.Content value="#overpass">
     <Card.Root>
       <Card.Header>
         <Card.Title>Overpass</Card.Title>
@@ -147,7 +156,7 @@
   </Tabs.Content>
 
   <!-- Vertigo -->
-  <Tabs.Content value="vertigo">
+  <Tabs.Content value="#vertigo">
     <Card.Root>
       <Card.Header>
         <Card.Title>Vertigo</Card.Title>
@@ -160,51 +169,4 @@
       </Card.Content>
     </Card.Root>
   </Tabs.Content>
-
-  <!-- <Tabs.Content value="account">
-    <Card.Root>
-      <Card.Header>
-        <Card.Title>Account</Card.Title>
-        <Card.Description>
-          Make changes to your account here. Click save when you're done.
-        </Card.Description>
-      </Card.Header>
-      <Card.Content class="space-y-2">
-        <div class="space-y-1">
-          <Label for="name">Name</Label>
-          <Input id="name" value="Pedro Duarte" />
-        </div>
-        <div class="space-y-1">
-          <Label for="username">Username</Label>
-          <Input id="username" value="@peduarte" />
-        </div>
-      </Card.Content>
-      <Card.Footer>
-        <Button>Save changes</Button>
-      </Card.Footer>
-    </Card.Root>
-  </Tabs.Content>
-  <Tabs.Content value="password">
-    <Card.Root>
-      <Card.Header>
-        <Card.Title>Password</Card.Title>
-        <Card.Description>
-          Change your password here. After saving, you'll be logged out.
-        </Card.Description>
-      </Card.Header>
-      <Card.Content class="space-y-2">
-        <div class="space-y-1">
-          <Label for="current">Current password</Label>
-          <Input id="current" type="password" />
-        </div>
-        <div class="space-y-1">
-          <Label for="new">New password</Label>
-          <Input id="new" type="password" />
-        </div>
-      </Card.Content>
-      <Card.Footer>
-        <Button>Save password</Button>
-      </Card.Footer>
-    </Card.Root>
-  </Tabs.Content> -->
 </Tabs.Root>
